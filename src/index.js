@@ -12,7 +12,7 @@ async function startServer() {
   try {
     if (useSSE) {
       // Start with SSE transport
-      server.start({
+      await server.start({
         transportType: 'sse',
         sse: {
           endpoint: '/sse',
@@ -21,7 +21,7 @@ async function startServer() {
       });
     } else {
       // Start with stdio transport
-      server.start({
+      await server.start({
         transportType: 'stdio',
       });
     }
