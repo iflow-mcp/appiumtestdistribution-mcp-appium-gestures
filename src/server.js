@@ -1,38 +1,23 @@
-import { Server } from '@modelcontextprotocol/sdk/server/index.js';
-import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import {
-  CallToolRequestSchema,
-  ListToolsRequestSchema,
-  ListResourcesRequestSchema,
-  ReadResourceRequestSchema,
-} from '@modelcontextprotocol/sdk/types.js';
+import { FastMCP } from 'fastmcp';
 import registerResources from './resources/index.js';
 import registerTools from './tools/index.js';
 
-// Create an MCP server
-const server = new Server(
-  {
-    name: 'Appium Gestures',
-    version: '1.0.0',
-  },
-  {
-    capabilities: {
-      tools: {},
-      resources: {},
-    },
-  }
-);
-
-// Override the assertRequestHandlerCapability method to ignore completions
-const originalAssertRequestHandlerCapability = server.assertRequestHandlerCapability;
-server.assertRequestHandlerCapability = function(method) {
-  // Ignore completions method
-  if (method === 'completion/complete') {
+// Monkey-patch the Server.setCapability method to allow completions
+import { Server } from '@modelcontextprotocol/sdk/server/index.js';
+const originalSetCapability = Server.prototype.setCapability;
+Server.prototype.setCapability = function(capability) {
+  if (capability === 'completions') {
     return;
   }
-  // Call original method for other methods
-  return originalAssertRequestHandlerCapability.call(this, method);
+  return originalSetCapability.call(this, capability);
 };
+
+// Create a FastMCP server
+const server = new FastMCP({
+  name: 'Appium Gestures',
+  version: '1.0.0',
+  description: 'MCP server providing resources and tools for Appium mobile gestures',
+});
 
 // Register all resources
 registerResources(server);
