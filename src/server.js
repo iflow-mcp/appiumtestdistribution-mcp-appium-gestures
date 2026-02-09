@@ -7,6 +7,10 @@ const server = new FastMCP({
   name: 'Appium Gestures',
   version: '1.0.0',
   description: 'MCP server providing resources and tools for Appium mobile gestures',
+  // Disable completions to avoid compatibility issues
+  capabilities: {
+    completions: false,
+  },
 });
 
 // Register all resources
