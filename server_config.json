@@ -1,0 +1,1 @@
+{"serverConfig": "{\"mcpServers\":{\"mcp-appium-gestures\":{\"command\":\"npx\",\"args\":[\"-y\",\"@iflow-mcp/appiumtestdistribution-mcp-appium-gestures\"],\"values\":{}}}}"}
